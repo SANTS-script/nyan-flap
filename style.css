@@ -1,0 +1,309 @@
+:root {
+  --void: #0a0e27;
+  --void-deep: #050714;
+  --cream: #fdfdf0;
+  --hot-pink: #ff4d9e;
+  --r1: #ff4d6d;
+  --r2: #ff9f4d;
+  --r3: #ffde59;
+  --r4: #59ff8f;
+  --r5: #4dc9ff;
+  --r6: #b34dff;
+  --tan: #f4c790;
+  --tan-dark: #d9a463;
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--void-deep);
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Space Mono', monospace;
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#stage {
+  position: relative;
+  width: 400px;
+  height: 620px;
+  max-width: 100vw;
+  max-height: 100vh;
+  background: var(--void);
+  box-shadow: 0 0 0 4px var(--hot-pink), 0 0 40px rgba(255, 77, 158, 0.4);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  width: 100%;
+  height: 100%;
+}
+
+/* CRT scanline overlay */
+#scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.15),
+    rgba(0,0,0,0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* ---------- Overlays ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 7, 20, 0.88);
+  z-index: 20;
+  padding: 24px;
+}
+.hidden { display: none !important; }
+
+.crt-box {
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+  animation: pop-in 0.25s ease-out;
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 2rem;
+  line-height: 1.4;
+  letter-spacing: 2px;
+  color: var(--cream);
+  text-shadow: 3px 3px 0 var(--hot-pink), 6px 6px 0 var(--r5);
+}
+.title.small { font-size: 1.3rem; margin-bottom: 14px; text-shadow: 2px 2px 0 var(--hot-pink); }
+.accent { color: var(--r3); }
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  opacity: 0.75;
+  letter-spacing: 1px;
+}
+
+.hint {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.cat-preview {
+  width: 96px;
+  height: 64px;
+  margin: 22px auto;
+  image-rendering: pixelated;
+}
+
+.btn {
+  font-family: 'Press Start 2P', monospace;
+  cursor: pointer;
+  border: none;
+  color: var(--void-deep);
+  padding: 14px 18px;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transition: transform 0.08s ease;
+}
+.btn:active { transform: scale(0.94); }
+
+.btn-primary {
+  margin-top: 20px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--r1), var(--r2), var(--r3), var(--r4), var(--r5), var(--r6));
+  background-size: 300% 100%;
+  animation: rainbow-slide 3s linear infinite;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.35);
+}
+@keyframes rainbow-slide {
+  from { background-position: 0% 0; }
+  to { background-position: 300% 0; }
+}
+
+.btn-mini {
+  background: var(--r5);
+  font-size: 0.65rem;
+  padding: 8px 12px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+  white-space: nowrap;
+}
+
+/* ---------- HUD ---------- */
+#hud {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+}
+#score {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 2rem;
+  color: var(--cream);
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+}
+
+/* ---------- Game over score row ---------- */
+.score-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.score-cell {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 8px 4px;
+}
+.score-cell .label {
+  display: block;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+.score-cell .value {
+  display: block;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.3rem;
+  color: var(--r3);
+}
+
+/* ---------- Tape / karaoke panel ---------- */
+.tape-panel {
+  background: linear-gradient(160deg, #171b3a, #0d1026);
+  border: 2px solid var(--r6);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 8px;
+}
+
+.tape-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.reel {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--void-deep) 0 4px, transparent 4.5px),
+    conic-gradient(var(--r5) 0 25%, var(--r6) 25% 50%, var(--r5) 50% 75%, var(--r6) 75% 100%);
+  border: 2px solid rgba(255,255,255,0.25);
+  flex-shrink: 0;
+}
+.reel.spin { animation: spin 1.4s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.tape-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+.tape-title span {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#nowPlayingTrack {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  color: var(--cream);
+}
+.tape-sub {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--r4);
+  margin-top: 4px;
+}
+
+.lyric-window {
+  min-height: 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 4px;
+  border-top: 1px dashed rgba(255,255,255,0.15);
+  border-bottom: 1px dashed rgba(255,255,255,0.15);
+  margin-bottom: 12px;
+}
+.lyric-line {
+  text-align: center;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  transition: all 0.25s ease;
+}
+.lyric-line.prev, .lyric-line.next {
+  opacity: 0.35;
+  font-size: 0.7rem;
+}
+.lyric-line.now {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--r3);
+  text-shadow: 0 0 10px rgba(255, 222, 89, 0.5);
+}
+
+.tape-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--r1), var(--r3), var(--r5));
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  #stage { width: 100vw; height: 100vh; box-shadow: none; }
+  :root { font-size: 15px; }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Nyan Flap 🌈🐱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="scanlines"></div>
+
+  <div id="stage">
+
+    <!-- START SCREEN -->
+    <div id="startScreen" class="overlay">
+      <div class="crt-box">
+        <h1 class="title">NYAN <span class="accent">FLAP</span></h1>
+        <p class="subtitle">weave the rainbow. dodge the cans.</p>
+        <div class="cat-preview" id="catPreview"></div>
+        <button id="startBtn" class="btn btn-primary">TAP / SPACE TO FLY</button>
+        <p class="hint">best: <span id="bestScoreStart">0</span></p>
+      </div>
+    </div>
+
+    <!-- GAME CANVAS -->
+    <canvas id="game" width="400" height="620"></canvas>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <span id="score">0</span>
+    </div>
+
+    <!-- GAME OVER / KARAOKE BOX -->
+    <div id="gameOverScreen" class="overlay hidden">
+      <div class="crt-box gameover-box">
+        <h2 class="title small">GAME OVER</h2>
+        <div class="score-row">
+          <div class="score-cell">
+            <span class="label">SCORE</span>
+            <span id="finalScore" class="value">0</span>
+          </div>
+          <div class="score-cell">
+            <span class="label">BEST</span>
+            <span id="bestScore" class="value">0</span>
+          </div>
+        </div>
+
+        <!-- Now Playing / karaoke panel -->
+        <div class="tape-panel">
+          <div class="tape-header">
+            <div class="reel" id="reelL"></div>
+            <div class="tape-title">
+              <span id="nowPlayingTrack">I LIKE U — NIKI</span>
+              <span class="tape-sub">NOW SPINNING</span>
+            </div>
+            <div class="reel" id="reelR"></div>
+          </div>
+          <div class="lyric-window">
+            <p id="lyricPrev" class="lyric-line prev"></p>
+            <p id="lyricNow" class="lyric-line now">press play to spin the tape</p>
+            <p id="lyricNext" class="lyric-line next"></p>
+          </div>
+          <div class="tape-controls">
+            <button id="playBtn" class="btn btn-mini">▶ PLAY</button>
+            <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+          </div>
+        </div>
+
+        <button id="restartBtn" class="btn btn-primary">PLAY AGAIN</button>
+      </div>
+    </div>
+
+  </div>
+
+  <audio id="bgm" src="assets/audio/i-like-u.mp3" preload="auto"></audio>
+
+  <script src="lyrics-data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
